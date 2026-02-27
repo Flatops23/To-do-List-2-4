@@ -3,107 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dev_Task_Terminal</title>
+    <title>Cream White Todo PWA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#272822">
+    <meta name="theme-color" content="#F5F5DC">
     <style>
-        :root {
-            --bg: #272822; /* Monokai Background */
-            --text: #f8f8f2;
-            --accent: #a6e22e; /* Green */
-            --delete: #f92672; /* Pink */
-            --input-bg: #3e3d32;
+        body { 
+            background-color: #F5F5DC; /* Cream White */
+            min-height: 100vh;
         }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            justify-content: center;
-            padding-top: 50px;
-        }
-
-        .terminal-window {
-            width: 90%;
-            max-width: 600px;
-            border: 1px solid #555;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .header {
-            background: #333;
-            padding: 5px 15px;
-            font-size: 12px;
-            color: #aaa;
-            border-bottom: 1px solid #555;
-        }
-
-        .content {
-            padding: 20px;
-        }
-
-        .input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        input {
-            flex-grow: 1;
-            background: var(--input-bg);
-            border: 1px solid #555;
-            color: var(--accent);
-            padding: 10px;
-            outline: none;
-        }
-
-        button#addBtn {
-            background: var(--accent);
-            color: var(--bg);
+        .card {
             border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-weight: bold;
+            border-radius: 15px;
         }
-
-        ul { list-style: none; padding: 0; }
-
-        li {
-            background: rgba(255,255,255,0.05);
-            margin-bottom: 8px;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 3px solid var(--accent);
-        }
-
-        .del-btn {
-            background: transparent;
-            color: var(--delete);
-            border: 1px solid var(--delete);
-            padding: 2px 8px;
-            cursor: pointer;
-        }
-        
-        .del-btn:hover { background: var(--delete); color: white; }
     </style>
 </head>
 <body>
 
-    <div class="terminal-window">
-        <div class="header">main.js - Todo_App</div>
-        <div class="content">
-            <div class="input-group">
-                <input type="text" id="taskInput" placeholder="const task = '...'">
-                <button id="addBtn" onclick="addTask()">PUSH</button>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6">
+                <div id="todo-container" class="card shadow p-4">
+                    <h2 class="text-center mb-4">My Tasks</h2>
+                    
+                    <div class="input-group mb-3">
+                        <input type="text" id="taskInput" class="form-control" placeholder="Add a new task...">
+                        <button class="btn btn-primary" onclick="addTask()">Add</button>
+                    </div>
+
+                    <ul id="taskList" class="list-group">
+                        </ul>
+                </div>
             </div>
-            <ul id="taskList"></ul>
         </div>
     </div>
 
     <script>
+        // Logic based on your screenshots
         const taskList = document.getElementById("taskList");
 
         function addTask() {
@@ -112,19 +48,25 @@
             
             if(task) {
                 const li = document.createElement("li");
-                // Implementing the logic from your screenshots
+                // Bootstrap classes for layout: d-flex and justify-content-between
+                li.className = "list-group-item d-flex justify-content-between align-items-center mb-2 rounded shadow-sm border";
+                
                 li.innerHTML = `
-                    <span>> ${task}</span>
-                    <button class="del-btn" onclick="this.parentElement.remove()">DROP</button>
+                    <span>${task}</span>
+                    <button class="btn btn-outline-danger btn-sm" onclick="this.parentElement.remove()">X</button>
                 `;
+                
                 taskList.appendChild(li);
                 input.value = "";
             }
         }
 
+        // Service Worker registration for mobile icon support
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js');
+                navigator.serviceWorker.register('./service-worker.js')
+                .then(reg => console.log('PWA Ready'))
+                .catch(err => console.log('PWA Setup failed', err));
             });
         }
     </script>
