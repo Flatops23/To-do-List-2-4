@@ -9,7 +9,7 @@
     <meta name="theme-color" content="#F5F5DC">
     <style>
         body { 
-            background-color: #F5F5DC; /* Cream White */
+            background-color: #F5F5DC;
             min-height: 100vh;
         }
         .card {
@@ -39,7 +39,6 @@
     </div>
 
     <script>
-        // Logic based on your screenshots
         const taskList = document.getElementById("taskList");
 
         function addTask() {
@@ -61,14 +60,17 @@
             }
         }
 
-        // Service Worker registration for mobile icon support
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js')
-                .then(reg => console.log('PWA Ready'))
-                .catch(err => console.log('PWA Setup failed', err));
-            });
-        }
+       if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("/service-worker.js")
+          .then(() => {
+            console.log("ayos! rehistro as service worker");
+          })
+          .catch((error) => {
+            console.log("Registration failed: ", error);
+          });
+      }
     </script>
 </body>
 </html>
+
