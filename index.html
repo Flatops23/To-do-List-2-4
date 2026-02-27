@@ -3,98 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Anime Quests</title>
+    <title>Dev_Task_Terminal</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#FFB6C1">
+    <meta name="theme-color" content="#272822">
     <style>
+        :root {
+            --bg: #272822; /* Monokai Background */
+            --text: #f8f8f2;
+            --accent: #a6e22e; /* Green */
+            --delete: #f92672; /* Pink */
+            --input-bg: #3e3d32;
+        }
+
         body {
-            background: #E0F7FA; /* Light sky blue */
-            background-image: linear-gradient(to bottom, #FFB6C1, #E0F7FA); /* Soft sunset */
-            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Courier New', Courier, monospace;
             display: flex;
             justify-content: center;
-            min-height: 100vh;
-            margin: 0;
+            padding-top: 50px;
+        }
+
+        .terminal-window {
+            width: 90%;
+            max-width: 600px;
+            border: 1px solid #555;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .header {
+            background: #333;
+            padding: 5px 15px;
+            font-size: 12px;
+            color: #aaa;
+            border-bottom: 1px solid #555;
+        }
+
+        .content {
             padding: 20px;
         }
-        .container {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 25px;
-            border-radius: 30px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-            border: 4px solid #FFB6C1;
-            text-align: center;
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
         }
-        h1 { color: #FF69B4; font-size: 24px; margin-bottom: 20px; }
-        .input-area { display: flex; gap: 10px; margin-bottom: 20px; }
+
         input {
-            flex: 1;
-            padding: 12px;
-            border-radius: 15px;
-            border: 2px solid #FFB6C1;
+            flex-grow: 1;
+            background: var(--input-bg);
+            border: 1px solid #555;
+            color: var(--accent);
+            padding: 10px;
             outline: none;
         }
-        button.add-btn {
-            background: #FF69B4;
-            color: white;
+
+        button#addBtn {
+            background: var(--accent);
+            color: var(--bg);
             border: none;
             padding: 10px 20px;
-            border-radius: 15px;
             cursor: pointer;
             font-weight: bold;
         }
+
         ul { list-style: none; padding: 0; }
+
         li {
-            background: #fff;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 15px;
+            background: rgba(255,255,255,0.05);
+            margin-bottom: 8px;
+            padding: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
-            border-left: 6px solid #87CEEB;
+            border-left: 3px solid var(--accent);
         }
+
         .del-btn {
-            background: #FFB6C1;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            background: transparent;
+            color: var(--delete);
+            border: 1px solid var(--delete);
+            padding: 2px 8px;
             cursor: pointer;
         }
+        
+        .del-btn:hover { background: var(--delete); color: white; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>✨ Today's Quests ✨</h1>
-        <div class="input-area">
-            <input type="text" id="taskInput" placeholder="Write a new quest...">
-            <button class="add-btn" onclick="addTask()">ADD</button>
+    <div class="terminal-window">
+        <div class="header">main.js - Todo_App</div>
+        <div class="content">
+            <div class="input-group">
+                <input type="text" id="taskInput" placeholder="const task = '...'">
+                <button id="addBtn" onclick="addTask()">PUSH</button>
+            </div>
+            <ul id="taskList"></ul>
         </div>
-        <ul id="taskList"></ul>
     </div>
 
     <script>
+        const taskList = document.getElementById("taskList");
+
         function addTask() {
             const input = document.getElementById("taskInput");
-            if (input.value.trim() === "") return;
-
-            const li = document.createElement("li");
-            li.innerHTML = `<span>⭐ ${input.value}</span> 
-                            <button class="del-btn" onclick="this.parentElement.remove()">✕</button>`;
+            const task = input.value.trim();
             
-            document.getElementById("taskList").appendChild(li);
-            input.value = "";
+            if(task) {
+                const li = document.createElement("li");
+                // Implementing the logic from your screenshots
+                li.innerHTML = `
+                    <span>> ${task}</span>
+                    <button class="del-btn" onclick="this.parentElement.remove()">DROP</button>
+                `;
+                taskList.appendChild(li);
+                input.value = "";
+            }
         }
 
-        // Makes it work like an App
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js');
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js');
+            });
         }
     </script>
 </body>
