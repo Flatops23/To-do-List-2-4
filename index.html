@@ -3,71 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-do-list App</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>My Anime Quests</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#F5F5DC">
+    <meta name="theme-color" content="#FFB6C1">
     <style>
-        body { 
-            background-color: #f0f0dd; 
+        body {
+            background: #E0F7FA; /* Light sky blue */
+            background-image: linear-gradient(to bottom, #FFB6C1, #E0F7FA); /* Soft sunset */
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            display: flex;
+            justify-content: center;
             min-height: 100vh;
+            margin: 0;
+            padding: 20px;
         }
-        .card {
-            border: none;
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            border: 4px solid #FFB6C1;
+            text-align: center;
+        }
+        h1 { color: #FF69B4; font-size: 24px; margin-bottom: 20px; }
+        .input-area { display: flex; gap: 10px; margin-bottom: 20px; }
+        input {
+            flex: 1;
+            padding: 12px;
             border-radius: 15px;
+            border: 2px solid #FFB6C1;
+            outline: none;
+        }
+        button.add-btn {
+            background: #FF69B4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        ul { list-style: none; padding: 0; }
+        li {
+            background: #fff;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+            border-left: 6px solid #87CEEB;
+        }
+        .del-btn {
+            background: #FFB6C1;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-6">
-                <div id="todo-container" class="card shadow p-4">
-                    <h2 class="text-center mb-4">My Tasks</h2>
-                    
-                    <div class="input-group mb-3">
-                        <input type="text" id="taskInput" class="form-control" placeholder="Add a new task...">
-                        <button class="btn btn-primary" onclick="addTask()">Add</button>
-                    </div>
-
-                    <ul id="taskList" class="list-group">
-                        </ul>
-                </div>
-            </div>
+    <div class="container">
+        <h1>✨ Today's Quests ✨</h1>
+        <div class="input-area">
+            <input type="text" id="taskInput" placeholder="Write a new quest...">
+            <button class="add-btn" onclick="addTask()">ADD</button>
         </div>
+        <ul id="taskList"></ul>
     </div>
 
     <script>
-        // Logic based on your screenshots
-        const taskList = document.getElementById("taskList");
-
         function addTask() {
             const input = document.getElementById("taskInput");
-            const task = input.value.trim();
+            if (input.value.trim() === "") return;
+
+            const li = document.createElement("li");
+            li.innerHTML = `<span>⭐ ${input.value}</span> 
+                            <button class="del-btn" onclick="this.parentElement.remove()">✕</button>`;
             
-            if(task) {
-                const li = document.createElement("li");
-                // Bootstrap classes for layout: d-flex and justify-content-between
-                li.className = "list-group-item d-flex justify-content-between align-items-center mb-2 rounded shadow-sm border";
-                
-                li.innerHTML = `
-                    <span>${task}</span>
-                    <button class="btn btn-outline-danger btn-sm" onclick="this.parentElement.remove()">X</button>
-                `;
-                
-                taskList.appendChild(li);
-                input.value = "";
-            }
+            document.getElementById("taskList").appendChild(li);
+            input.value = "";
         }
 
-        // Service Worker registration for mobile icon support
+        // Makes it work like an App
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js')
-                .then(reg => console.log('PWA Ready'))
-                .catch(err => console.log('PWA Setup failed', err));
-            });
+            navigator.serviceWorker.register('service-worker.js');
         }
     </script>
 </body>
